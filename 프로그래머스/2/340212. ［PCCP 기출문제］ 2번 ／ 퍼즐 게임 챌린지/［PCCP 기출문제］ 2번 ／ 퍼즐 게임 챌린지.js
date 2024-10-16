@@ -44,6 +44,4 @@ function solution(diffs, times, limit) {
             level = Math.floor((leftLevel + rightLevel) / 2)
         }
     }
-    
-    return level;
 }
