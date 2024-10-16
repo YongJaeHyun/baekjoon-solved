@@ -3,9 +3,8 @@ function solution(diffs, times, limit) {
     let leftLevel = 1;
     let rightLevel = 100000;
     
-    while(true){
+    function getIsLevelExceedLimit(level) {
         let totalTime = 0;
-        let isSatisfied = true;
         
         for(let i = 0; i < diffs.length; i++){
             const currentLevel = diffs[i];
@@ -19,24 +18,22 @@ function solution(diffs, times, limit) {
                 totalTime += repeatCnt * (prevTime + currentTime) + currentTime;
             }
             
-            if(totalTime > limit){
-                isSatisfied = false;
-                break;
-            } 
+            if(totalTime > limit) return false;
         }
+        return true;
+    }
+    
+    while(true){
+        const isExceedLimit = getIsLevelExceedLimit(level)
         
-        if(isSatisfied){
-            if(rightLevel - leftLevel <= 1) {
-                level = leftLevel;
-                break;
-            }
+        if(isExceedLimit){
+            if(rightLevel - leftLevel <= 1) return leftLevel;
+            
             rightLevel = level;
             level = Math.floor((leftLevel + rightLevel) / 2)
         } else {
-            if(rightLevel - leftLevel <= 1) {
-                level = rightLevel;
-                break;
-            }
+            if(rightLevel - leftLevel <= 1) return rightLevel;
+            
             leftLevel = level;
             level = Math.floor((leftLevel + rightLevel) / 2)
         }
