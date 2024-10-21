@@ -17,8 +17,10 @@ function solution(video_len, pos, op_start, op_end, commands) {
         
         if(minute === videoMinute && second > videoSecond) return video_len
         else if(minute < 0 || (minute === 0 && second < 0)) return "00:00";
-
-        return `${minute < 10 ? `0${minute}` : minute}:${second < 10 ? `0${second}` : second}`;
+        
+        const parsedMinute = minute < 10 ? `0${minute}` : minute;
+        const parsedSecond = second < 10 ? `0${second}` : second;
+        return `${parsedMinute}:${parsedSecond}`;
     }
     
     function checkIsOpeningTime() {
