@@ -30,9 +30,9 @@ function solution(video_len, pos, op_start, op_end, commands) {
         const isOverOpStart = opStartMinute < minute || opStartMinute === minute && opStartSecond <= second
         const isUnderOpEnd = minute < opEndMinute || minute === opEndMinute && second <= opEndSecond
         
-        if(opStartMinute < minute && minute < opEndMinute) return true;
-        else if(isOverOpStart && isUnderOpEnd) return true;
-        else return false;
+        if(isOverOpStart && isUnderOpEnd) return true;
+        
+        return false;
     }
     
     for(const command of commands) {
