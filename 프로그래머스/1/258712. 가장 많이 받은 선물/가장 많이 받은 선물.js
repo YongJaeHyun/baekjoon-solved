@@ -30,7 +30,7 @@ function findMax(array){
             maxNum = num;
         }
     }
-    return maxNum;
+    return maxNum ?? 0;
 }
 
 function solution(friends, gifts) {
@@ -56,7 +56,7 @@ function solution(friends, gifts) {
     // 2. 기록이 없거나 선물을 주고받은 수가 같으면, 선물 지수가 큰 사람이 작은 사람에게 선물을 하나 받음.
     // 3. 선물 지수도 같다면, 다음달에 선물을 주고받지 않음
     for(let i = 0; i < giveAndTakeGraph.length; i++){
-        for(let j = 0; j < giveAndTakeGraph.length; j++){
+        for(let j = i+1; j < giveAndTakeGraph.length; j++){
             if(i === j) continue; // 본인이 본인한테 선물 준 경우
             
             // CASE 2, 3
@@ -76,5 +76,5 @@ function solution(friends, gifts) {
         }
     }
     
-    return findMax(nextGiftCount) / 2;
+    return findMax(nextGiftCount);
 }
