@@ -14,14 +14,13 @@ function solution(ingredient) {
     let stack = []
     for(let i = 0; i < ingredient.length; i++){
         stack.push(ingredient[i])
-        if(stack.length >= 4){
-            const currentIngredient = slice(stack, -4).join('')
-            if(currentIngredient === '1231'){
-                stack.length -= 4; // 배열 마지막 4개 요소 삭제
-                answer++
-            }
-        }
+        if(stack.length < 4) continue;
         
+        const currentIngredient = slice(stack, -4).join('')
+        if(currentIngredient === '1231'){
+            stack.length -= 4; // 배열 마지막 4개 요소 삭제
+            answer++
+        }
     }
     return answer;
 }
