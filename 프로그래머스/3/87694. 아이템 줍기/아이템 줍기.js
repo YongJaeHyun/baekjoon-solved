@@ -29,10 +29,10 @@ function solution(rectangle, characterX, characterY, itemX, itemY) {
     const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     
     while (queue.length) {
-        const [x, y, deps] = queue.shift();
+        const [x, y, dist] = queue.shift();
         
         if (x === itemX && y === itemY) {
-            return deps / 2;
+            return dist / 2;
         }
         for (let [dx, dy] of directions) {
             const nx = x + dx;
@@ -40,7 +40,7 @@ function solution(rectangle, characterX, characterY, itemX, itemY) {
             
             if (!visited.has(`${nx},${ny}`) && board[nx][ny] === 1) {
                 visited.add(`${nx},${ny}`);
-                queue.push([nx, ny, deps + 1]);
+                queue.push([nx, ny, dist + 1]);
             }
         }
     }
