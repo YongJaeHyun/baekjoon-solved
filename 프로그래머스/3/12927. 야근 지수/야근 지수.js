@@ -3,7 +3,7 @@ function solution(n, works) {
 
     let i = 0;
     while (n > 0) {
-        if (works[i] === 0) break;
+        if (works[0] === 0) break;
 
         works[i]--;
         n--;
