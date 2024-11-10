@@ -1,6 +1,5 @@
 function solution(routes) {
     let answer = 0;
-    const isVisited = Array(routes.length).fill(false);
     routes.sort((a, b)=>a[1] - b[1]);
     
     let prevEnd;
