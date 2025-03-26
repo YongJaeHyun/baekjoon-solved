@@ -5,7 +5,9 @@ function solution(schedules, timelogs, startday) {
         let hopeSchedule = schedule + 10;
         let isSuccess = true;
         for(let j = 0; j < 7; j++){
-            if((startday + j) % 7 === 6 || (startday + j) % 7 === 0) continue;
+            const day = startday + j;
+            if(day % 7 === 6 || day % 7 === 0) continue;
+            
             let timelog = timelogs[i][j];
             if(hopeSchedule % 100 >= 60) {
                 hopeSchedule += 40 
