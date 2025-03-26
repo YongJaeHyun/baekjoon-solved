@@ -10,9 +10,6 @@ function solution(schedules, timelogs, startday) {
             if(hopeSchedule % 100 >= 60) {
                 hopeSchedule += 40 
             }
-            if(timelog / 100 === 0){
-                timelog += 2400
-            }
             
             if(hopeSchedule < timelog){
                 isSuccess = false;
