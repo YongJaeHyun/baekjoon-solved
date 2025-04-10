@@ -1,48 +1,53 @@
-
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
 function solution(n, q, ans) {
     let answer = 0;
+    const combinations = [];
 
-    for(let a = 1; a <= n - 4; a++) {
-        for(let b = a + 1; b <= n - 3; b++) {
-            for(let c = b + 1; c <= n - 2; c++) {
-                for(let d = c + 1; d <= n - 1; d++) {
-                    for(let e = d + 1; e <= n; e++) {
-                        const currSet = [a, b, c, d, e];
-                        const currAnswer = [];
+    // 미리 조건들을 bitmask로 변환
+    const conditionMasks = q.map(arr => {
+        let mask = 0;
+        for (let num of arr) {
+            mask |= (1 << (num - 1));
+        }
+        return mask;
+    });
 
-                        for(let i = 0; i < q.length; i++) {
-                            const sameNumberCount = 10 - new Set([...currSet, ...q[i]]).size;
-                            if(sameNumberCount === ans[i]) currAnswer.push(sameNumberCount);
-                        }
-
-                        if(JSON.stringify(currAnswer) === JSON.stringify(ans)) answer++;
-                    }
-                }
+    // 가능한 모든 5개 숫자 조합을 비트마스크로 생성
+    const generate = (start, depth, mask) => {
+        if (depth === 5) {
+            combinations.push(mask);
+            return;
+        }
+        for (let i = start; i <= n; i++) {
+            if ((mask & (1 << (i - 1))) === 0) {
+                generate(i + 1, depth + 1, mask | (1 << (i - 1)));
             }
         }
+    };
+    generate(1, 0, 0);
+
+    // 각 조합마다 조건 확인
+    for (let mask of combinations) {
+        let valid = true;
+        for (let i = 0; i < q.length; i++) {
+            const commonBits = mask & conditionMasks[i];
+            const bitCount = countBits(commonBits);
+            if (bitCount !== ans[i]) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) answer++;
     }
 
     return answer;
+}
+
+// 비트 1의 개수를 세는 함수 (Brian Kernighan’s algorithm)
+function countBits(x) {
+    let count = 0;
+    while (x) {
+        x &= (x - 1);
+        count++;
+    }
+    return count;
 }
