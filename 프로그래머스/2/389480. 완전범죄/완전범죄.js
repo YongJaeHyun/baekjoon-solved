@@ -15,7 +15,7 @@ function solution(info, n, m) {
         }
     }
     
-    const lastInfo = Array.from(dp.at(-1)).map((info) => info.split(",").map(Number));
-    if(lastInfo.length === 0) return -1;
-    return lastInfo.sort((a, b) => a[0] - b[0])[0][0];
+    const lastAInfo = Array.from(dp.at(-1)).map((info) => info.split(",").map(Number));
+    const result = Math.min(...lastAInfo.map(([ aInfo ]) => aInfo));
+    return result === Infinity ? -1 : result;
 }
