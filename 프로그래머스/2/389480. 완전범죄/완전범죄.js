@@ -1,56 +1,21 @@
-
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
 function solution(info, n, m) {
-    const len = info.length;
-    const INF = 9999;
-
-    let dp = Array.from({ length: len + 1 }, () => Array(m).fill(INF));
-
-    dp[0][0] = 0;
-
-    for (let i = 0; i < len; i++) {
-        let aTrace = info[i][0], bTrace = info[i][1];
-
-        for (let j = m - 1; j >= 0; j--) {
-            if (dp[i][j] === INF) continue;
-
-            let newA = dp[i][j] + aTrace;
-            let newB = j;
-            if (newA < n) dp[i + 1][newB] = Math.min(dp[i + 1][newB], newA);
-
-            let newA2 = dp[i][j];
-            let newB2 = j + bTrace;
-            if (newB2 < m) dp[i + 1][newB2] = Math.min(dp[i + 1][newB2], newA2);
+    const dp = Array.from({ length: info.length + 1 }, () => new Set());
+    dp[0].add("0,0");
+    
+    for(let i = 1; i < dp.length; i++) {
+        for(let prevInfo of dp[i - 1]) {
+            const [prevAInfo, prevBInfo] = prevInfo.split(",").map(Number);
+            const [aInfo, bInfo] = info[i - 1];
+            if(prevAInfo + aInfo < n) {
+                dp[i].add(`${prevAInfo + aInfo},${prevBInfo}`);
+            } 
+            if(prevBInfo + bInfo < m) {
+                dp[i].add(`${prevAInfo},${prevBInfo + bInfo}`);
+            }
         }
     }
-
-    let result = Math.min(...dp[len]);
-    return result === INF ? -1 : result;
+    
+    const lastInfo = Array.from(dp.at(-1)).map((info) => info.split(",").map(Number));
+    if(lastInfo.length === 0) return -1;
+    return lastInfo.sort((a, b) => a[0] - b[0])[0][0];
 }
