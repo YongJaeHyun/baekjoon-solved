@@ -72,9 +72,7 @@ function solution(storage, requests) {
                     const ny = y + dy[d];
 
                     if (nx < 0 || ny < 0 || nx >= colLength || ny >= rowLength) continue;
-                    if (storage[nx][ny] !== "") {
-                        pickable[nx][ny] = true;
-                    }
+                    pickable[nx][ny] = true;
                 }
             }
         }
