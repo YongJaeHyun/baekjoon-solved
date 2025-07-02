@@ -1,37 +1,93 @@
+class MinHeap {
+    constructor(heap) {
+        heap.sort((a, b) => a - b);
+        this.heap = heap;
+    }
+    
+    swap(index1, index2) {
+        [this.heap[index1], this.heap[index2]] = [this.heap[index2], this.heap[index1]];
+    }
+    
+    heapifyUp() {
+        let index = this.heap.length - 1;
+        
+        while(index > 0) {
+            const parentIndex = Math.floor((index - 1) / 2);
+            if(this.heap[parentIndex] <= this.heap[index]) break;
+            
+            this.swap(index, parentIndex);
+            index = parentIndex;
+        }
+    }
+    
+    heapifyDown() {
+        const length = this.heap.length;
+        const root = this.peek();
+        let index = 0;
+        
+        while(true) {
+            let minNodeIndex = index;
+            const leftNodeIndex = 2 * index + 1;
+            const rightNodeIndex = 2 * index + 2;
+            
+            const leftNode = this.heap[leftNodeIndex];
+            const rightNode = this.heap[rightNodeIndex];
+            
+            if(leftNodeIndex < length && leftNode < this.heap[minNodeIndex]) {
+                minNodeIndex = leftNodeIndex;
+            }
+            if(rightNodeIndex < length && rightNode < this.heap[minNodeIndex]) {
+                minNodeIndex = rightNodeIndex;
+            }
+            if(minNodeIndex === index) break;
+            
+            this.swap(index, minNodeIndex);
+            index = minNodeIndex;
+        }
+    }
+    
+    push(node) {
+        this.heap.push(node);
+        this.heapifyUp()
+    }
+    
+    shift() {
+        if(this.heap.length === 0) return;
+        
+        const root = this.heap[0];
+        const lastNode = this.heap.pop();
+        
+        if(this.heap.length > 0) {
+            this.heap[0] = lastNode;
+            this.heapifyDown();
+        }
+        
+        return root;
+    }
+    
+    peek() {
+        return this.heap[0];
+    }
+    
+    combine() {
+        if(this.heap.length < 2) return;
+        
+        const first = this.shift();
+        const second = this.shift();
+        const result = first + 2 * second;
+        this.push(result);
+    }
+}
+
 function solution(scoville, K) {
-    var answer = 0;
-
-    scoville.sort((a, b) => a - b);
-    const newScoville = [];
-    // scoville 배열의 인덱스
-    let index1 = 0; 
-    // newScoville 배열의 인덱스
-    let index2 = 0; 
-
-    //2개의 리스트를 합쳐서 작은 값 찾기
-    const findMin = () =>{
-        const a = scoville[index1]
-        const b = newScoville[index2]
-
-        if (a === undefined) return newScoville[index2++];
-        if (b === undefined) return scoville[index1++];
-        return a < b ? scoville[index1++] : newScoville[index2++];
+    let answer = 0;
+    const minHeap = new MinHeap(scoville);
+    
+    while(minHeap.heap.length > 1) {
+        if(minHeap.peek() >= K) return answer;
+        minHeap.combine();
+        answer++;
     }
-
-    //조리가 가능 할때 까지
-    while(scoville.length - index1 + newScoville.length - index2 > 0){
-
-        //가장 안매운 음식이 K이상일때
-        const min1 = findMin()
-        if (min1 >= K) return answer
-
-        //마지막 남은 요리가 K보다 안매웟을때
-        const min2 = findMin()
-        if(min2 === undefined) return -1
-
-        //새로운 요리를 만들어 newScoville에 추가
-        const mix = min1+min2*2
-        newScoville.push(mix)
-        answer++
-    }
+    
+    return minHeap.peek() >= K ? answer : -1;
 }
