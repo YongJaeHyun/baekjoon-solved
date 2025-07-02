@@ -1,7 +1,7 @@
 class MinHeap {
     constructor(heap) {
-        heap.sort((a, b) => a - b);
-        this.heap = heap;
+        this.heap = [];
+        heap.forEach((sc) => this.push(sc));
     }
     
     swap(index1, index2) {
