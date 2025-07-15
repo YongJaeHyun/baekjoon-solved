@@ -1,27 +1,28 @@
 function solution(N, road, K) {
-    const isDeliverableTown = Array(N + 1).fill(false);
-    const roadMap = {};
-    for(const [start, end, time] of road) {
-        if(!roadMap[start]) roadMap[start] = [];
-        if(!roadMap[end]) roadMap[end] = [];
-        roadMap[start].push([end, time]);
-        roadMap[end].push([start, time]);
+  const adj = Array.from({ length: N + 1 }, () => []);
+  
+  for (const [a, b, t] of road) {
+    adj[a].push([b, t]);
+    adj[b].push([a, t]);
+  }
+
+  const dist = Array(N + 1).fill(Infinity);
+  dist[1] = 0;
+
+  const pq = [[1, 0]];
+
+  while (pq.length > 0) {
+    const [current, time] = pq.shift();
+
+    for (const [next, t] of adj[current]) {
+      if (dist[next] > time + t) {
+        dist[next] = time + t;
+        pq.push([next, dist[next]]);
+      }
     }
-    
-    const dfs = (currentTown, times, visited) => {
-        isDeliverableTown[currentTown] = true;
-        
-        for(const [end, time] of roadMap[currentTown]) {
-            if(!visited[end] && times + time <= K) {
-                visited[end] = true;
-                dfs(end, times + time, visited);
-                visited[end] = false;
-            }
-        }
-    }
-    
-    const visited = Array(N + 1).fill(false);
-    dfs(1, 0, visited);
-    
-    return isDeliverableTown.filter((isAble) => isAble).length;
+
+    pq.sort((a, b) => a[1] - b[1]);
+  }
+
+  return dist.filter(d => d <= K).length;
 }
