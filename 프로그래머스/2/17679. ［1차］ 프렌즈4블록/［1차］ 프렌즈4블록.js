@@ -34,10 +34,10 @@ function solution(m, n, board) {
         if(arr[x][y-1] !== char) return;
         if(arr[x][y] !== char) return;
         
-        if(arr[x-1][y-1]) visited.add(`${x-1},${y-1}`)
-        if(arr[x][y-1]) visited.add(`${x},${y-1}`)
-        if(arr[x-1][y]) visited.add(`${x-1},${y}`)
-        if(arr[x][y]) visited.add(`${x},${y}`)
+        visited.add(`${x-1},${y-1}`)
+        visited.add(`${x},${y-1}`)
+        visited.add(`${x-1},${y}`)
+        visited.add(`${x},${y}`)
     }
     
     function rearrange() {
