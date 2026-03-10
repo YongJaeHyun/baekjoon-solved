@@ -1,26 +1,27 @@
-function solution(enroll, referral, seller, amount) {
-    const n = enroll.length;
+function solution(enrolls, referrals, sellers, amounts) {
+    const profitOfEnrolls = Array(enrolls.length).fill(0);
+    const sellerToIndex = {}
     
-    const nameToIndex = new Map();
-    for (let i = 0; i < n; i++) {
-        nameToIndex.set(enroll[i], i);
+    for(let i = 0; i < enrolls.length; i++) {
+        sellerToIndex[enrolls[i]] = i
     }
     
-    const profits = Array(n).fill(0);
-    
-    for (let i = 0; i < seller.length; i++) {
-        let current = nameToIndex.get(seller[i]);
-        let profit = amount[i] * 100;
+    for(let i = 0; i < sellers.length; i++) {
+        let seller = sellers[i]
+        let profit = amounts[i] * 100
+        let referral = referrals[sellerToIndex[seller]]
         
-        while (current !== -1 && profit > 0) {
-            const give = Math.floor(profit / 10);
-            profits[current] += profit - give;
+        while(profit > 0) {
+            const givenProfit = Math.floor(profit / 10)
+            profitOfEnrolls[sellerToIndex[seller]] += profit - givenProfit
             
-            profit = give;
-            const parent = referral[current];
-            current = parent === "-" ? -1 : nameToIndex.get(parent);
+            if(referral === "-") break;
+            
+            seller = referral;
+            referral = referrals[sellerToIndex[seller]]
+            profit = givenProfit
         }
     }
     
-    return profits;
+    return profitOfEnrolls;
 }
